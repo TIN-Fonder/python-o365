@@ -5,6 +5,7 @@ from dateutil.parser import parse
 from .utils import ApiComponent, TrackerSet, NEXT_LINK_KEYWORD, Pagination
 from .address_book import Contact
 from .drive import Storage
+from .notes import Notes
 
 log = logging.getLogger(__name__)
 
@@ -461,6 +462,10 @@ class Site(ApiComponent):
                                     main_resource='/sites/{id}'.format(
                                         id=self.object_id))
 
+        self.notes = Notes(parent=self,
+                           main_resource='/sites/{id}'.format(
+                            id=self.object_id))
+
     def __str__(self):
         return self.__repr__()
 
@@ -469,6 +474,9 @@ class Site(ApiComponent):
 
     def __eq__(self, other):
         return self.object_id == other.object_id
+
+    def get_notes(self):
+        return self.notes
 
     def get_default_document_library(self, request_drive=False):
         """ Returns the default document library of this site (Drive instance)
